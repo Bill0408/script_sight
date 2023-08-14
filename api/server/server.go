@@ -2,6 +2,7 @@ package server
 
 import (
 	"github.com/gorilla/mux"
+	"log"
 	"net/http"
 	"script_sight/controller"
 )
@@ -22,4 +23,10 @@ func (s *Server) RegisterRoutes() {
 	r.HandleFunc("/", controller.HomePageHandler)
 
 	s.s.Handler = r
+}
+
+func (s *Server) ListenAndServe() {
+	if err := s.s.ListenAndServe(); err != nil {
+		log.Fatal(err)
+	}
 }
