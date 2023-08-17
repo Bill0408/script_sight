@@ -22,7 +22,7 @@ const (
 	// by 2 raised to the right operand, so 10 << 20 is equivalent to 10 * 2^20, which is 10,485,760.
 	maxMemory = 10 << 20
 	// key corresponds to the name attribute of the file input field in the form.
-	key = "uploadfile"
+	key = "file"
 
 	// fnImgPairKey is the key used to store and retrieve the slice containing the file name and image data.
 	fnImgPairKey = 0
@@ -45,6 +45,7 @@ func ImageValidator(next http.Handler) http.Handler {
 		// Retrieve the first file associated with the key.
 		file, handler, err := r.FormFile(key)
 		if err != nil {
+			fmt.Println(err.Error())
 			http.Error(w, "Error retrieving the file", http.StatusBadRequest)
 			return
 		}
@@ -77,7 +78,7 @@ func ImageValidator(next http.Handler) http.Handler {
 
 		// Check the bytes that were written to the byte slice "buffer" for the magic numbers of jpeg
 		// and png files. jpeg files begin with 0xFF 0xD8, and png files begin with 0x89 0x50 0x4E 0x47.
-		// If the file does not begin with those values, it it not a png or jpeg file.
+		// If the file does not begin with those values, it not a png or jpeg file.
 		if !(buffer[0] == 0xFF && buffer[1] == 0xD8) && // Check if jpeg.
 			!(buffer[0] == 0x89 && buffer[1] == 0x50 && buffer[2] == 0x4E && buffer[3] == 0x47) { // Check if png.
 			http.Error(w, "Only png and jpeg files are allowed", http.StatusBadRequest)
@@ -142,7 +143,7 @@ func ImageHandler(w http.ResponseWriter, r *http.Request) {
 	modifiedImg := fnAndImg[1].(*image.NRGBA)
 
 	// Create an output file with the same name as the image's file name.
-	outputFile, err := os.Create(fmt.Sprintf("../script_sight/api/controller/img%s", fn))
+	outputFile, err := os.Create(fmt.Sprintf("../script_sight/api/img/%s", fn))
 	if err != nil {
 		http.Error(w, "Error creating output file", http.StatusInternalServerError)
 		fmt.Println(err.Error())
@@ -174,11 +175,18 @@ func ImageHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	// Reset the pointer so that other file operations can have access to the full contents of the file.
+	_, err = outputFile.Seek(0, 0)
+	if err != nil {
+		http.Error(w, "Error resetting pointer", http.StatusInternalServerError)
+		return
+	}
+
 	var b bytes.Buffer
 
 	mw := multipart.NewWriter(&b)
 
-	fw, err := mw.CreateFormFile("modifiedimg", outputFile.Name())
+	fw, err := mw.CreateFormFile("image", outputFile.Name())
 	if err != nil {
 		http.Error(w, "Error creating form file", http.StatusInternalServerError)
 		return
@@ -197,7 +205,7 @@ func ImageHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Create a multipart form request that contains the modified image
 	// to the python server that runs the AI model.
-	req, err := http.NewRequest("POST", "http://localhost:3000/img", &b)
+	req, err := http.NewRequest("POST", "http://localhost:8000/ai/", &b)
 	if err != nil {
 		http.Error(w, "Error creating the request", http.StatusInternalServerError)
 		return
@@ -207,6 +215,7 @@ func ImageHandler(w http.ResponseWriter, r *http.Request) {
 	// Make the request.
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
+		fmt.Println(err.Error())
 		http.Error(w, "Error making the request", http.StatusInternalServerError)
 		return
 	}
