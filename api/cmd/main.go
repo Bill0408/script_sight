@@ -11,7 +11,7 @@ import (
 const (
 	port = ":8080"
 
-	dirName  = "../script_sight/api/controller/img"
+	dirName  = "../script_sight/api/img"
 	ownerRWS = 0700
 )
 
