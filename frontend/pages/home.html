@@ -7,10 +7,27 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 </head>
 <body>
-<div class="container-fluid bg-black" style="height: 100vh">
-
+<div class="container-fluid bg-dark d-flex align-items-center justify-content-center" style="height: 100vh">
+	<div class="row bg-dark text-info text-center">
+		<div class="col mb-3">
+			<h5>Draw a number</h5>
+			<div class="card border border-0">
+				<canvas class="bg-black rounded"></canvas>
+			</div>
+			<p>To draw, press and hold the left mouse button, and then move the mouse in the direction of the number that you would like to draw.</p>
+			<button type="button" class="btn btn-success">Make Prediction</button>
+		</div>
+		<div class="col">
+			<h5>AI's prediction</h5>
+			<div class="card border border-0">
+				<canvas class="bg-black rounded"></canvas>
+			</div>
+			<p>The AI's prediction is the number that the AI thinks you drew.</p>
+		</div>
+	</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<script type="module" src="/static/home.js?v={{.Hash}}"></script>
 </body>
 </html>
