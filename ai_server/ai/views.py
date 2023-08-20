@@ -14,7 +14,7 @@ def predict(request):
         if form.is_valid():
 
             # Extract the uploaded image from the cleaned data of the form.
-            modified_img = form.cleaned_data["image"]
+            modified_img = form.cleaned_data["uploadFile"]
 
             # Print the modified image.
             print(modified_img)
