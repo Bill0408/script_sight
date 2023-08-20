@@ -10,17 +10,17 @@
 <div class="container-fluid bg-dark d-flex align-items-center justify-content-center" style="height: 100vh">
 	<div class="row bg-dark text-info text-center">
 		<div class="col mb-3">
-			<h5>Draw a number</h5>
+			<h5>Draw a digit from 0 to 9</h5>
 			<div class="card border border-0">
-				<canvas class="bg-black rounded"></canvas>
+				<canvas id="cnv1" class="bg-black rounded"></canvas>
 			</div>
 			<p>To draw, press and hold the left mouse button, and then move the mouse in the direction of the number that you would like to draw.</p>
-			<button type="button" class="btn btn-success">Make Prediction</button>
+			<button id="prediction" type="button" class="btn btn-success">Make Prediction</button>
 		</div>
 		<div class="col">
 			<h5>AI's prediction</h5>
 			<div class="card border border-0">
-				<canvas class="bg-black rounded"></canvas>
+				<canvas id="cnv2" class="bg-black rounded"></canvas>
 			</div>
 			<p>The AI's prediction is the number that the AI thinks you drew.</p>
 		</div>
