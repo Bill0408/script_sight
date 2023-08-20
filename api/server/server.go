@@ -10,6 +10,7 @@ import (
 
 type Server struct {
 	s *http.Server
+	c *controller.Controller
 }
 
 // handler is used to cast and function that contains
@@ -21,18 +22,23 @@ func (h handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	h(w, r)
 }
 
-func New(s *http.Server) *Server {
+func New(s *http.Server, c *controller.Controller) *Server {
 	return &Server{
 		s: s,
+		c: c,
 	}
 }
 
 func (s *Server) RegisterRoutes() {
 	r := mux.NewRouter()
 
-	r.HandleFunc("/", controller.HomePageHandler)
-	r.Handle("/upload", alice.New(controller.ImageValidator, controller.ImageModifier).
-		Then(handler(controller.ImageHandler)))
+	fs := http.FileServer(http.Dir("../script_sight/frontend/static"))
+
+	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fs))
+
+	r.HandleFunc("/", s.c.HomePageHandler)
+	r.Handle("/upload", alice.New(controller.ImgUrlConverter).
+		Then(handler(controller.ImgUploader)))
 
 	s.s.Handler = r
 }
