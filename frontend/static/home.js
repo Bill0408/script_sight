@@ -7,9 +7,7 @@ let isDrawing = false;
 let ctx1 = cnv1.getContext("2d")
 let ctx2 = cnv2.getContext("2d");
 
-// Fill the drawing canvas with a black rectangle that serves as the background color.
-ctx1.fillStyle = 'black';
-ctx1.fillRect(0, 0, cnv1.width, cnv1.height);
+ctx2.font = "100px Arial"
 
 // getMousePos calculates the mouse position relative to the canvas.
 function getMousePos(canvas, event) {
@@ -46,8 +44,7 @@ function draw(event) {
 
     let pos = getMousePos(cnv1, event);
 
-    ctx1.lineWidth = 8;
-    ctx1.lineCap = "round";
+    ctx1.lineWidth = 14;
     ctx1.strokeStyle = "white";
 
     ctx1.lineTo(pos.x, pos.y);
@@ -62,23 +59,45 @@ cnv1.addEventListener("mouseup", function() {
 // As the mouse moves, call the draw function to start drawing.
 cnv1.addEventListener('mousemove', draw)
 
-predictionButton.addEventListener("click", function () {
+predictionButton.addEventListener("click", async function () {
     if (predictionButton.innerHTML === "Make Prediction") {
         // Get the offscreen canvas and its context.
         let cnvCtx = createOffScreenCanvas();
         // Convert the image in the offscreen canvas to grayscale.
-        convertToGrayscale(cnvCtx.ctx);
 
         // Get a data url
         let imageURL = cnvCtx.cnv.toDataURL("image/png");
 
-        uploadImageUrl(imageURL)
+        const responseData = await uploadImageUrl(imageURL);
+
+        // Prepare the canvas
+        ctx2.fillStyle = 'black';
+        ctx2.fillRect(0, 0, cnv2.width, cnv2.height);
+
+        // Increase font size and set style
+        ctx2.font = "100px Arial";
+
+        // Set the fill color for the text
+        ctx2.fillStyle = 'white';
+
+        // Center the number on the canvas
+        ctx2.textBaseline = "middle"
+        ctx2.textAlign = "center"
+
+        ctx2.fillText(responseData, cnv2.width / 2, cnv2.height / 2);
+
+        predictionButton.innerHTML = "Clear"
+
+        // Draw the text
+        ctx2.fillText(responseData, x, y);
 
         predictionButton.innerHTML = "Clear"
     } else {
         predictionButton.innerHTML = "Make Prediction"
         ctx1.fillStyle = 'black';
         ctx1.fillRect(0, 0, cnv1.width, cnv1.height);
+        ctx2.fillStyle = 'black';
+        ctx2.fillRect(0, 0, cnv2.width, cnv2.height);
     }
 });
 
@@ -98,31 +117,11 @@ function createOffScreenCanvas() {
     }
 }
 
-function convertToGrayscale(ctx) {
-    // Get image data for the specified region.
-    let imageData = ctx.getImageData(0, 0, 28, 28);
-    let data = imageData.data;
-
-    // Iterate over pixel values in sets of 4 (R, G, B, A).
-    for (let i = 0; i < data.length; i += 4) {
-        // Calculate grayscale value using luminosity formula.
-        let grayscale = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
-
-        // Set RGB channels to grayscale value.
-        data[i] = grayscale;     // Red
-        data[i + 1] = grayscale; // Green
-        data[i + 2] = grayscale; // Blue
-    }
-
-    // Update the canvas with grayscale image data.
-    ctx.putImageData(imageData, 0, 0);
-}
-
+// Upload a json containing the data url of the image to the go server.
 async function uploadImageUrl(dataUrl) {
     let data = {
         imgUrl: dataUrl
-    }
-
+    };
     try {
         const response = await fetch("upload", {
             method: "POST",
@@ -133,12 +132,14 @@ async function uploadImageUrl(dataUrl) {
         });
 
         if (!response.ok) {
-            console.log(response)
+            console.error("Response not OK:", response);
+            return null;
         }
 
-        const responseData = await response.json();
-        console.log(responseData);
-    } catch (error) {
+      return await response.text()
 
+    } catch (error) {
+        console.error("An error occurred:", error);
+        return null;
     }
 }
