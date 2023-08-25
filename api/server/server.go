@@ -32,7 +32,7 @@ func New(s *http.Server, c *controller.Controller) *Server {
 func (s *Server) RegisterRoutes() {
 	r := mux.NewRouter()
 
-	fs := http.FileServer(http.Dir("../script_sight/frontend/static"))
+	fs := http.FileServer(http.Dir("/frontend/static"))
 
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fs))
 
