@@ -54,7 +54,7 @@ func ImgUrlConverter(next http.Handler) http.Handler {
 		// Get an io reader containing the png bytes from the decoded byte array,
 		// and create a file called img.png.
 		imgReader := bytes.NewReader(decoded)
-		file, err := os.Create("../script_sight/api/img/img.png")
+		file, err := os.Create("img/img.png")
 		if err != nil {
 			fmt.Println("Error creating file: ", err)
 			http.Error(w, "Failed to create image file", http.StatusInternalServerError)
@@ -126,7 +126,7 @@ func ImgUploader(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// The url endpoint for on the django server.
-	url := "http://localhost:8000/ai/"
+	url := "http://django:8000/ai/"
 
 	// Create a new http request with the body of the byte buffer
 	// that contains the multipart form data.
