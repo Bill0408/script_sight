@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM python:3.9-slim
 
 # Set environment variables
 # Ensures Python outputs everything that's printed inside the application rather than buffering it.
