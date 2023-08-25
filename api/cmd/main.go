@@ -15,14 +15,14 @@ import (
 const (
 	port = ":8080"
 
-	dirName  = "../script_sight/api/img"
+	dirName  = "./img"
 	ownerRWS = 0700
 )
 
 func main() {
 	createImgDir()
 
-	c := controller.New(hashFile("../script_sight/frontend/static/home.js"))
+	c := controller.New(hashFile("/frontend/static/home.js"))
 
 	s := &http.Server{Addr: port}
 

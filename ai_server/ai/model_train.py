@@ -127,4 +127,4 @@ for t in range(epochs):
 print("Done!")
 
 # Save the model weights, so it can be used for predictions.
-torch.save(model.state_dict(), "../ai_server/ai/model_weights.pth")
+torch.save(model.state_dict(), "/script_sight/ai/model_weights.pth")
