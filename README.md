@@ -41,7 +41,7 @@ https://github.com/Bill0408/script_sight.git
 Type the following comand to navigate to the project directory:
 
 ```bash
-cd script-sight
+cd script_sight
 ```
 
 #### 3. Run Docker Compose to start the services
