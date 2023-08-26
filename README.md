@@ -28,7 +28,11 @@ download docker at this link: https://www.docker.com/products/docker-desktop/
 
 ### Steps
 
-#### 1. Clone this repository
+#### 1. Open Docker
+
+After downloading docker, open it, and wait for the docker engine to start
+
+#### 2. Clone this repository
 
 Open your terminal (or Command Prompt on Windows) and run the following command to clone the repository:
 
@@ -36,7 +40,7 @@ Open your terminal (or Command Prompt on Windows) and run the following command 
 git clone https://github.com/Bill0408/script_sight.git
 ```
 
-#### 2. Navigate into the project directory
+#### 3. Navigate into the project directory
 
 Type the following comand to navigate to the project directory:
 
@@ -44,15 +48,15 @@ Type the following comand to navigate to the project directory:
 cd script_sight
 ```
 
-#### 3. Run Docker Compose to start the services
+#### 4. Run Docker Compose to start the services
 
-Type the following command to run Docker Compose:
+Type the below command to run Docker Compose. After typing the command, wait for docker to finish composing the project:
 
 ```bash
 docker-compose up
 ```
 
-#### 4. Open your web browser and then copy and paste this: `http://localhost:8080`
+#### 5. Open your web browser and then copy and paste this: `http://localhost:8080`
 
 ## Demo
 
