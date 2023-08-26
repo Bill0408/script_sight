@@ -33,7 +33,7 @@ download docker at this link: https://www.docker.com/products/docker-desktop/
 Open your terminal (or Command Prompt on Windows) and run the following command to clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/script-sight.git
+https://github.com/Bill0408/script_sight.git
 ```
 
 #### 2. Navigate into the project directory
