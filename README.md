@@ -3,6 +3,7 @@
 ## Table of Contents
 
 - Introduction
+- How it works
 - Installation
 - Demo
 - Technologies Used
@@ -12,6 +13,10 @@
 Script Sight is an interactive project where you can draw a digit on an HTML canvas, and an AI model will predict what digit you drew. 
 It consists of two HTML canvases; one for drawing and the other for displaying the AI's predicted digit. 
 The application is backed by a Go server that handles requests and a Django server running a PyTorch model for digit recognition.
+
+## How it works
+
+When you draw on the left canvas and click the "Make Prediction" button, an offscreen 28x28 HTML canvas is created to resize your drawing. This specific 28x28 dimension matches the input on which the AI, trained using the MNIST dataset, expects. This resizing ensures consistency and accuracy in prediction. The resized image is converted to a Data URL, capturing the PNG image in a base64-encoded format. This is sent to the Go server, which decodes it into an actual PNG image. This image is then sent in a multipart form request to the Django server running the AI. Before the prediction, the image undergoes several transformations: it's converted to grayscale for computational simplicity and to mimic the MNIST training data, transformed into a tensor (the standard format for AI processing), and its pixel values are normalized to ensure consistent scaling with the training data. The AI then predicts the digit, relays the information back to the Go server, which finally sends the prediction to be displayed on the right canvas in your browser.
 
 ## Installation
 
